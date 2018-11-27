@@ -2,14 +2,29 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-void dimensao_matriz(FILE *p,int *u,int *v)
+
+float moda_nao_nula(float v[],int n)
 {
-    char det_TAM[25000];
-    while ((fgets(det_TAM, 25000, p)) != NULL)
+	int i=0, j=0, cont[n];
+	float conta=0, moda=0;
+	
+	for(i=0;i<n && (v[i] != 0);i++)
     {
-        *u++;
+        for(j=i+1;j<n;j++)
+        {
+			if(v[i]==v[j])
+            {
+				cont[i]++;
+					if(cont[i]>conta)
+                    {
+						conta=cont[i];
+						moda=v[i];
+					}
+			}
+        }
+        cont[i]=0;
     }
-    *v = (strlen(det_TAM) + 1) / 5;
+	return moda;
 }
 
 float maximo_vetor(float *p, int n)
@@ -84,6 +99,10 @@ int main()
     i = 0;
     while ((ctreino[i] = sconfig[i]) != '\n')
     {
+        if (ctreino[i] == '/')
+        {
+            ctreino[i] = '\\';
+        }
         i++;
     }
     ctreino[i] = '\0';
@@ -128,10 +147,10 @@ int main()
     j=0;
     while ((cteste[j] = sconfig[i]) != '\n')
     {
-        /*if (cteste[j] == '/')
+        if (cteste[j] == '/')
         {
             cteste[j] = '\\';
-        }*/
+        }
         i++;
         j++;
     }
@@ -165,7 +184,7 @@ int main()
         }
     }
     fclose(teste);
-    printf("%.2f ",t[4][4]);
+    printf("%.2f\n\n",t[4][4]);
 
     // Caminho das predições:
     char cpredicao[50];
@@ -173,10 +192,10 @@ int main()
     j=0;
     while ((cpredicao[j] = sconfig[i]) != '\n')
     {
-        /*if (cpredicao[j] == '/')
+        if (cpredicao[j] == '/')
         {
             cpredicao[j] = '\\';
-        }*/
+        }
         i++;
         j++;
     }
@@ -184,21 +203,20 @@ int main()
 
     // Calculando N predições:
     // Leu 3, E. Logo:
-    int b = 0;
     float resultados[w][u]; // u = 105 e w = 45
-    for (j=0;j<u;j++)
+    int b;
+    for (j=0;j<w;j++)
     {
-        for (l=0;l<w;l++)
+        b = 0;
+        for (l=0;l<u;l++)
         {
-            if (distanciaEuclidiana(q[j],t[l],(v-1)) <= 4) // 5 são as colunas de teste/treino e 4 = 5 - 1 (que é o tipo das amostras).
+            if ((distanciaEuclidiana(t[j],q[l],(v-1))) <= 3) // 5 são as colunas de teste/treino e 4 = 5 - 1 (que é o tipo das amostras).
             {
-                resultados[l][b] = q[j][v-1];
+                resultados[j][b] = q[l][v-1];
                 b++;
             }
         }
     }
-    print("%d", resultados[0][0]);
-    
-    printf("\n");
+    moda_nao_nula()
     return 0;
 }
