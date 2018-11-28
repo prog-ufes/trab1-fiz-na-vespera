@@ -224,16 +224,39 @@ int main()
         (fgets(det_TAM, 25000, config)); //Colocando o ponteiro no terceiro parágrafo do arquivo.
     }
 
-    for(j=1;j<2;j++)
+    for(j=0;j<b;j++)
     {
         fscanf(config,"%d, %c, %f",&k[j],&c[j],&f[j]);
-        printf("%d %c %f",k[j],c[j],f[j]);
+        switch(c[j])
+        {
+            case 'M': 
+
+            break;
+            case 'E':
+                float resultados[w][u]; // u = 105 e w = 45
+                for (j=0;j<w;j++)
+                {
+                    h = 0;
+                    for (l=0;l<u;l++)
+                    {
+                        if ((distanciaEuclidiana(t[j],q[l],(v-1))) <= 3) // 5 são as colunas de teste/treino e 4 = 5 - 1 (que é o tipo das amostras).
+                        {
+                            resultados[j][h] = q[l][v-1];
+                            h++;
+                        }
+                    }
+                }
+                break;
+            case 'C':
+
+            break;
+        }
     }
 
 // PARTE A SER TERMINADA
 
 
-
+/*
     float resultados[w][u]; // u = 105 e w = 45
     for (j=0;j<w;j++)
     {
@@ -247,6 +270,6 @@ int main()
             }
         }
     }
-    
+    */
     return 0;
 }
