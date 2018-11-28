@@ -201,10 +201,40 @@ int main()
     }
     cpredicao[j] = '\0';
 
-    // Calculando N predições:
-    // Leu 3, E. Logo:
+    //Lendo N predições da config:
+    i++; //Tirando o i da posição quebra de linha \n
+    j=i;
+    int b = 1; // B = quantidade de predições impressas
+    for (j;sconfig[j] != EOF;j++)
+    {
+        if (sconfig[j] == '\n')
+        {
+            b+=1;
+        }
+    }
+   // PARTE A SER TERMINADA  
+    float f[b];
+    int k[b];
+    char c[b];
+ 
+    fopen("config.txt","r");
+ 
+    for (j=0;j<3;j++)
+    {
+        (fgets(det_TAM, 25000, config)); //Colocando o ponteiro no terceiro parágrafo do arquivo.
+    }
+
+    for(j=1;j<2;j++)
+    {
+        fscanf(config,"%d, %c, %f",&k[j],&c[j],&f[j]);
+        printf("%d %c %f",k[j],c[j],f[j]);
+    }
+
+// PARTE A SER TERMINADA
+
+
+
     float resultados[w][u]; // u = 105 e w = 45
-    int b;
     for (j=0;j<w;j++)
     {
         b = 0;
@@ -217,6 +247,6 @@ int main()
             }
         }
     }
-    moda_nao_nula()
+    
     return 0;
 }
