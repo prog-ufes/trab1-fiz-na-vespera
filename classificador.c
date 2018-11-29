@@ -212,44 +212,109 @@ int main()
             b+=1;
         }
     }
-   // PARTE A SER TERMINADA  
-    float f[b];
-    int k[b];
-    char c[b];
- 
-    fopen("config.txt","r");
- 
-    for (j=0;j<3;j++)
+   
+   
+    int k[b], h, cont_acertos, cont_erros, matriz_confusao[3][3];
+    float r[b], resultados_parciais[w][u], resultados[w], acc = (cont_acertos / (cont_erros + cont_acertos)); // u = 105 e w = 45
+    char c[b],nome[b][15],auxpredicao[50];
+    char gconverte[12];
+    strcat(cpredicao,"predicao_");
+    FILE *predicao;
+    for(j=0;j<1;j++)
     {
-        (fgets(det_TAM, 25000, config)); //Colocando o ponteiro no terceiro parágrafo do arquivo.
-    }
-
-    for(j=0;j<b;j++)
-    {
-        fscanf(config,"%d, %c, %f",&k[j],&c[j],&f[j]);
+        sprintf(gconverte,"%d",j+1);
+        strcpy(auxpredicao,cpredicao);
+        strcat(auxpredicao, gconverte);
+        strcat(auxpredicao, ".txt");
+        printf("%s",auxpredicao[j]);
+        predicao = fopen(auxpredicao,"w");
+        fprintf(predicao,"aaaaa");
+        fscanf(config,"%d, %c, %f",&k[j],&c[j],&r[j]);
         switch(c[j])
         {
-            case 'M': 
-
-            break;
-            case 'E':
-                float resultados[w][u]; // u = 105 e w = 45
-                for (j=0;j<w;j++)
+            case 'M':
+                cont_acertos = 0, cont_erros = 0, acc = 0;
+                for (i=0;i<w;i++)
                 {
                     h = 0;
                     for (l=0;l<u;l++)
                     {
-                        if ((distanciaEuclidiana(t[j],q[l],(v-1))) <= 3) // 5 são as colunas de teste/treino e 4 = 5 - 1 (que é o tipo das amostras).
+                        if ((distanciaMinkowsky(t[i],q[l],(v-1),r[j])) <= k[j]) // 5 são as colunas de teste/treino e 4 = 5 - 1 (que é o tipo das amostras).
                         {
-                            resultados[j][h] = q[l][v-1];
+                            resultados_parciais[i][h] = q[l][v-1];
                             h++;
                         }
                     }
+
+                    resultados[i] = moda_nao_nula(resultados_parciais[i],u);
+                    if (resultados[i] == t[i][v-1])
+                    {
+                        cont_acertos ++;
+                    }
+                    else
+                    {
+                        cont_erros ++;
+                    }
+                    fprintf(predicao,"%.2f",acc);
+                    fclose(predicao);
                 }
                 break;
+            
+            case 'E':
+                cont_acertos = 0, cont_erros = 0, acc = 0;
+                for (i=0;i<w;i++)
+                {
+                    h=0;
+                    for (l=0;l<u;l++)
+                    {
+                        if ((distanciaEuclidiana(t[i],q[l],(v-1))) <= k[j]) // 5 são as colunas de teste/treino e 4 = 5 - 1 (que é o tipo das amostras).
+                        {
+                            resultados_parciais[i][h] = q[l][v-1];
+                            h++;
+                        }
+                    }
+                    
+                    resultados[i] = moda_nao_nula(resultados_parciais[i],u);
+                    if (resultados[i] == t[i][v-1])
+                    {
+                        cont_acertos ++;
+                    }
+                    else
+                    {
+                        cont_erros ++;
+                    }
+                    fprintf(predicao,"%.2f",acc);
+                    fclose(predicao);
+                }
+                break;
+            
             case 'C':
+                cont_acertos = 0, cont_erros = 0, acc = 0;
+                for (i=0;i<w;i++)
+                {
+                    h = 0;
+                    for (l=0;l<u;l++)
+                    {
+                        if ((distanciaEuclidiana(t[i],q[l],(v-1))) <= k[j]) // 5 são as colunas de teste/treino e 4 = 5 - 1 (que é o tipo das amostras).
+                        {
+                            resultados_parciais[i][h] = q[l][v-1];
+                            h++;
+                        }
+                    }
 
-            break;
+                    resultados[i] = moda_nao_nula(resultados_parciais[i],u);
+                    if (resultados[i] == t[i][v-1])
+                    {
+                        cont_acertos ++;
+                    }
+                    else
+                    {
+                        cont_erros ++;
+                    }
+                    fprintf(predicao,"%.2f",acc);
+                    fclose(predicao);
+                }
+                break;
         }
     }
 
