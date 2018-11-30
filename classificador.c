@@ -139,7 +139,6 @@ int main()
         }
     }
     fclose(treino);
-    printf("%.2f\n",q[4][4]);
     
     //Caminho de Teste:
     char cteste[50];
@@ -184,7 +183,6 @@ int main()
         }
     }
     fclose(teste);
-    printf("%.2f\n\n",t[4][4]);
 
     // Caminho das predições:
     char cpredicao[50];
@@ -203,32 +201,35 @@ int main()
 
     //Lendo N predições da config:
     i++; //Tirando o i da posição quebra de linha \n
-    j=i;
-    int b = 1; // B = quantidade de predições impressas
-    for (j;sconfig[j] != EOF;j++)
+    int b = 0; // B = quantidade de predições impressas
+    for (i;sconfig[i] != EOF;i++)
     {
-        if (sconfig[j] == '\n')
+        if (sconfig[i] == '\n')
         {
             b+=1;
         }
     }
    
-   
-    int k[b], h, cont_acertos, cont_erros, matriz_confusao[3][3];
-    float r[b], resultados_parciais[w][u], resultados[w], acc = (cont_acertos / (cont_erros + cont_acertos)); // u = 105 e w = 45
-    char c[b],nome[b][15],auxpredicao[50];
+    int k[b], h;
+    float r[b], resultados_parciais[w][u], resultados[w],cont_acertos, cont_erros, acc; // u = 105 e w = 45
+    char c[b],auxpredicao[100];
     char gconverte[12];
     strcat(cpredicao,"predicao_");
     FILE *predicao;
-    for(j=0;j<1;j++)
+    config = fopen("config.txt","r");
+    for (i=0;i<3;i++)
+    {
+        fgets(det_TAM,25000,config); //Colocando config no terceiro paragráfo.
+    }
+
+    for(j=0;j<b;j++)
     {
         sprintf(gconverte,"%d",j+1);
         strcpy(auxpredicao,cpredicao);
         strcat(auxpredicao, gconverte);
         strcat(auxpredicao, ".txt");
-        printf("%s",auxpredicao[j]);
+        printf("%s\n",auxpredicao);
         predicao = fopen(auxpredicao,"w");
-        fprintf(predicao,"aaaaa");
         fscanf(config,"%d, %c, %f",&k[j],&c[j],&r[j]);
         switch(c[j])
         {
@@ -255,8 +256,17 @@ int main()
                     {
                         cont_erros ++;
                     }
-                    fprintf(predicao,"%.2f",acc);
-                    fclose(predicao);
+                }
+                acc = 100*(cont_acertos / (cont_erros + cont_acertos));
+                fprintf(predicao,"%.2f\n",acc);
+                fprintf(predicao,"\n");
+                for (l=0;l<3;l++)
+                {
+                    fprintf(predicao,"\n");
+                }
+                for (i=0;i<w;i++)
+                {
+                    fprintf(predicao,"%d\n",(int) resultados[i] -1);
                 }
                 break;
             
@@ -272,6 +282,7 @@ int main()
                             resultados_parciais[i][h] = q[l][v-1];
                             h++;
                         }
+
                     }
                     
                     resultados[i] = moda_nao_nula(resultados_parciais[i],u);
@@ -283,8 +294,17 @@ int main()
                     {
                         cont_erros ++;
                     }
-                    fprintf(predicao,"%.2f",acc);
-                    fclose(predicao);
+                }
+                acc = 100*(cont_acertos / (cont_erros + cont_acertos));
+                fprintf(predicao,"%.2f\n",acc);
+                fprintf(predicao,"\n");
+                for (l=0;l<3;l++)
+                {
+                    fprintf(predicao,"\n");
+                }
+                for (i=0;i<w;i++)
+                {
+                    fprintf(predicao,"%d\n",(int) resultados[i] -1);
                 }
                 break;
             
@@ -311,30 +331,24 @@ int main()
                     {
                         cont_erros ++;
                     }
-                    fprintf(predicao,"%.2f",acc);
-                    fclose(predicao);
+                    
+                }
+                acc = 100*(cont_acertos / (cont_erros + cont_acertos));
+                fprintf(predicao,"%.2f\n",acc);
+                fprintf(predicao,"\n");
+                for (l=0;l<3;l++)
+                {
+                    fprintf(predicao,"\n");
+                }
+
+                for (i=0;i<w;i++)
+                {
+                    fprintf(predicao,"%d\n",(int) resultados[i] -1);
                 }
                 break;
         }
+        fclose(predicao);
     }
-
-// PARTE A SER TERMINADA
-
-
-/*
-    float resultados[w][u]; // u = 105 e w = 45
-    for (j=0;j<w;j++)
-    {
-        b = 0;
-        for (l=0;l<u;l++)
-        {
-            if ((distanciaEuclidiana(t[j],q[l],(v-1))) <= 3) // 5 são as colunas de teste/treino e 4 = 5 - 1 (que é o tipo das amostras).
-            {
-                resultados[j][b] = q[l][v-1];
-                b++;
-            }
-        }
-    }
-    */
+    fclose(config);
     return 0;
 }
